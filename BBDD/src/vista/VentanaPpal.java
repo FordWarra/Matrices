@@ -34,7 +34,7 @@ public class VentanaPpal extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[][grow][][grow][]", "[][]"));
+		contentPane.setLayout(new MigLayout("", "[][grow][][grow][]", "[][][50px][]"));
 		
 		JButton btnNewButton = new JButton("MostarEditoriales");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -45,7 +45,28 @@ public class VentanaPpal extends JFrame {
 		contentPane.add(btnNewButton, "cell 1 1");
 		
 		JButton btnNewButton_1 = new JButton("Mostrar Libros");
-		contentPane.add(btnNewButton_1, "cell 3 1");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controlador.mostrarLibros();
+			}
+		});
+		contentPane.add(btnNewButton_1, "cell 3 1,alignx right");
+		
+		JButton btnmostarAutores = new JButton("MostarAutores");
+		btnmostarAutores.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controlador.mostrarAutores();
+			}
+		});
+		contentPane.add(btnmostarAutores, "cell 1 3,alignx left");
+		
+		JButton btnAñadirAutor = new JButton("A\u00F1adir Autor");
+		btnAñadirAutor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controlador.mostrarAñadirAutores();
+			}
+		});
+		contentPane.add(btnAñadirAutor, "cell 3 3,alignx right");
 	}
 
 

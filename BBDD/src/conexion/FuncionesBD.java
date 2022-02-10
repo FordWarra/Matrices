@@ -4,13 +4,14 @@
 package conexion;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import conexion.*;
 
-import modelo.Editorial;
-import modelo.Libro;
+import modelo.*;
 
 
 /**
@@ -96,10 +97,85 @@ public class FuncionesBD {
 			} catch (SQLException e) {
 				System.out.println("Error al liberar recursos: "+e.getMessage());
 			} catch (Exception e) {
-				
+				System.out.println("Error al cerrar variables: "+e.getMessage());
 			}
 		}
 		return lista;
 	}
+	
+public static ArrayList<Autor> mostrarAutor(){
+		
+	ArrayList<Autor> lista = new ArrayList<Autor>();
+		Connection con = conexion.getConexion();
+		Statement consulta = null;
+		ResultSet resultado = null;
+		
+		try {
+			consulta = con.createStatement();
+			resultado = consulta.executeQuery("select * from autores;");
+			
+			while(resultado.next()){
+				int idAutor = resultado.getInt("idAutor");
+				String nombre = resultado.getString("nombre");
+				String apellidos = resultado.getString("apellidos");
+				
+				Autor a  =new Autor(idAutor,nombre,apellidos);
+				lista.add(a);
+			}
+			
+		}
+		catch(SQLException e) {
+			System.out.println("Error al realizar la consulta: "+e.getMessage());
+		}
+		finally {
+			try {
+				resultado.close();
+				consulta.close();
+				conexion.desconectar();
+			
+			} catch (SQLException e) {
+				System.out.println("Error al liberar recursos: "+e.getMessage());
+			} catch (Exception e) {
+				System.out.println("Error al cerrar variables: "+e.getMessage());
+			}
+		}
+		
+		return lista;
+	}
+	
+	
+	public static int añadirAutor(Autor a){
+
+		Connection con = conexion.getConexion();
+		PreparedStatement consulta = null;
+		int resultado = 0;
+		try {
+			consulta = con.prepareStatement("Insert into autores (nombre,apellidos) values (?,?)");
+
+				consulta.setString(1, a.getNombre());
+				consulta.setString(2, a.getApellidos());
+				resultado = consulta.executeUpdate();
+			
+			
+		}
+		catch(SQLException e) {
+			System.out.println("Error al realizar la consulta: "+e.getMessage());
+		}
+		finally {
+			try {
+				consulta.close();
+				conexion.desconectar();
+			
+			} catch (SQLException e) {
+				System.out.println("Error al liberar recursos: "+e.getMessage());
+			} catch (Exception e) {
+				System.out.println("Error al cerrar variables: "+e.getMessage());
+			}
+		}
+		
+		return resultado;
+	}
+	
+
 	
 }
